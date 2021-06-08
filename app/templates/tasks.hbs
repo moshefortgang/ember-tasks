@@ -1,0 +1,52 @@
+{{page-title "Tasks"}}
+<div class="container  min-vh-100" style="background-color: rgba(0, 0, 0, 0.2);">
+  <div class="header align-items-center d-flex justify-content-between p-4 pb-2 pt-1">
+    <h2>Tasks</h2>
+    <button type="button" class="button p-2" onclick={{action "createTask" }}>
+      <span class="plus rounded-circle"></span>
+    </button>
+  </div>
+  <ul class="list-group">
+    {{#each this.model as |task index|}}
+
+    <li
+      class="{{if task.completed 'task-completed' }} list-group-item d-flex justify-content-between align-items-center">
+      <span class="d-flex">
+        <div>
+          <label class="checkbox-container">
+            <input type="checkbox" checked={{task.completed}} onchange={{action (action "updateStatus" task.id)
+              value="target.checked" }}>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        {{#if (eq this.isEditing index)}}
+        <form class="text-center form-text" {{action "toggleEditing" on="submit" }}>
+          {{input value=task.name class="mb-2"}}
+          <button type="submit" class="btn btn-sm btn-primary" {{action "updateTask" task}}>Submit</button>
+        </form>
+        {{else}}
+        <span>
+          {{list-item index}}.
+          <span class="fs-5 fw-bold" {{action "editTask" index}}>
+            {{task.name}}
+          </span>
+        </span>
+        {{/if}}
+      </span>
+
+      <span class="remove-button" onclick={{action "deleteTask" task.id}}>
+      </span>
+    </li>
+    {{/each}}
+  </ul>
+
+  <footer class="footer">
+    <div class="container d-flex justify-content-between p-4">
+      <div> {{this.totalTasks}}:סה"כ </div>
+      <div> {{this.completedTasks}}:הושלמו </div>
+      <div> {{this.toFinishTasks}}:לסיום </div>
+    </div>
+  </footer>
+</div>
+
+{{outlet}}
